@@ -1,0 +1,8 @@
+{
+  "name": "Schedular Algorithms",
+  "description": "Scheduling algorithms tell the CPU which will be the next process to have CPU time. The main goal of scheduling algorithms is to Maximize Throughput. Scheduling algorithms can be preemptive and non-preemptive.",
+  "version": "1.0.0",
+  "main": "main.py",
+  "authors": ["Muhammad Waleed", "Farhan Ali", "Abrar Bajwa", "Abeer Khan"],
+  "license": "MIT"
+}
