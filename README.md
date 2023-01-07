@@ -7,18 +7,22 @@ Scheduling algorithms tell the CPU which will be the next process to have CPU ti
 To run the backend server, run these commands
 
 ```bash
-cd backend```
+cd backend
+```
 
 ```bash
-python main.py```
+python main.py
+```
 
 For Frontend,
 
 ```bash
-cd frontend```
+cd frontend
+```
 
 ```bash
-npm start```
+npm start
+```
 
 # Contribution
 
@@ -40,7 +44,7 @@ Run this command after making changes to the code.
 git commit -m "{enter your contribution message}"
 ```
 Commit your contributions using above command.
-`Note: replace curly braces with your message`
+`Note: replace curly braces with your message` <br>
 Finally push your code using,
 
 ```bash
