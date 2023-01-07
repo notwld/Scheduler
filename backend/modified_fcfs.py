@@ -61,4 +61,4 @@ for i in range(len(processes)):
 console.print(table)
 
 print("Avarege TAT: ", round(sum(TAT)/len(TAT), 2))
-print("Avarege WT: ", round(sum(WT)/len(WT), 2))
+print("Avarege WT: ", round(sum(WT)/len(WT), 2)) 
