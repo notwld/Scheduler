@@ -1,12 +1,13 @@
-from abc import ABC,abstractmethod
+from abc import ABC, abstractmethod
 
 class Scheduler(ABC):
-    PROCESSES: list = []
-    BT: list = []
-    CT: list = []
-    TAT: list = []
-    WT: list = []
-
+    def __init__(self):
+        self.PROCESSES = []
+        self.BT = []
+        self.CT = []
+        self.TAT = []
+        self.WT = []
+    
     @abstractmethod
     def CALCULATE_CT(self):
         pass
@@ -26,10 +27,11 @@ class Scheduler(ABC):
     @abstractmethod
     def CALCULATE_AVG_TAT(self):
         pass
-
 
 class FCFS(Scheduler):
-    def __init__(self):
+    def __init__(self,processes: list):
+        super().__init__()
+        self.PROCESSES = processes
         self.PROCESSES.sort(key=lambda x: x[1])
     
     def CALCULATE_CT(self):
@@ -46,147 +48,113 @@ class FCFS(Scheduler):
                     self.CT.append(self.CT[i-1]+self.PROCESSES[i][2]+idle_state)
                 else:
                     self.CT.append(self.CT[i-1]+self.PROCESSES[i][2])
-
         return self.CT
-    
+
     def CALCULATE_TAT(self):
         for i in range(len(self.PROCESSES)):
             self.TAT.append(self.CT[i]-self.PROCESSES[i][1])
-        
-        return self.TAT
 
     def CALCULATE_WT(self):
         for i in range(len(self.PROCESSES)):
             self.WT.append(self.TAT[i]-self.PROCESSES[i][2])
 
-        return self.WT
-
     def CALCULATE_AVG_WT(self):
-        return round(sum(self.TAT)/len(self.TAT), 2)
+        return round(sum(self.WT)/len(self.WT), 2)
 
     def CALCULATE_AVG_TAT(self):
-        return round(sum(self.WT)/len(self.WT), 2)
+        return round(sum(self.TAT)/len(self.TAT), 2)
+
+    def output(self):
+        self.CALCULATE_CT()
+        self.CALCULATE_TAT()
+        self.CALCULATE_WT()
+        return {
+            "CT": self.CT,
+            "TAT": self.TAT,
+            "WT": self.WT,
+            "AVG_WT": self.CALCULATE_AVG_WT(),
+            "AVG_TAT": self.CALCULATE_AVG_TAT()
+        }
 
 class SJF(Scheduler):
-    def __init__(self):
-        self.PROCESSES.sort(key=lambda x: x[2]) 
-    
-    def CALCULATE_CT(self):
-        for i in range(len(self.PROCESSES)):
-            if i == 0:
-                if self.PROCESSES[i][1] > 0:
-                    state_idle = self.PROCESSES[i][1]
-                    self.CT.append(self.PROCESSES[i][2]+state_idle)
-                else:
-                    self.CT.append(self.PROCESSES[i][2])
-            else:
-                if self.CT[i-1] < self.PROCESSES[i][1]:
-                    idle_state = self.PROCESSES[i][1] - self.CT[i-1]
-                    self.CT.append(self.CT[i-1]+self.PROCESSES[i][2]+idle_state)
-                else:
-                    self.CT.append(self.CT[i-1]+self.PROCESSES[i][2])
-        return self.CT
-    
-    def CALCULATE_TAT(self):
-        for i in range(len(self.PROCESSES)):
-            self.TAT.append(self.CT[i]-self.PROCESSES[i][1])
-        
-        return self.TAT
-
-    def CALCULATE_WT(self):
-        for i in range(len(self.PROCESSES)):
-            self.WT.append(self.TAT[i]-self.PROCESSES[i][2])
-
-        return self.WT
-
-    def CALCULATE_AVG_WT(self):
-        return round(sum(self.WT)/len(self.WT), 2)
-
-    def CALCULATE_AVG_TAT(self):
-        return round(sum(self.TAT)/len(self.TAT), 2)
-
-class RoundRobin(Scheduler):
-    def __init__(self, time_quantum: int):
-        self.time_quantum = time_quantum
-        self.PROCESSES.sort(key=lambda x: x[1])
-    
-    def CALCULATE_CT(self):
-        time = 0
-        for i in range(len(self.PROCESSES)):
-            if i == 0:
-                if self.PROCESSES[i][1] > 0:
-                    state_idle = self.PROCESSES[i][1]
-                    self.CT.append(self.PROCESSES[i][2]+state_idle)
-                    time = self.CT[i]
-                else:
-                    self.CT.append(self.PROCESSES[i][2])
-                    time = self.CT[i]
-            else:
-                if self.CT[i-1] < self.PROCESSES[i][1]:
-                    idle_state = self.PROCESSES[i][1] - self.CT[i-1]
-                    self.CT.append(self.CT[i-1]+self.PROCESSES[i][2]+idle_state)
-                    time = self.CT[i]
-                else:
-                    if self.PROCESSES[i][2] > self.time_quantum:
-                        self.PROCESSES[i][2] -= self.time_quantum
-                        time += self.time_quantum
-                        self.CT.append(time)
-                    else:
-                        time += self.PROCESSES[i][2]
-                        self.CT.append(time)
-                        
-        return self.CT
-    
-    def CALCULATE_TAT(self):
-        for i in range(len(self.PROCESSES)):
-            self.TAT.append(self.CT[i]-self.PROCESSES[i][1])
-        
-        return self.TAT
-
-    def CALCULATE_WT(self):
-        for i in range(len(self.PROCESSES)):
-            self.WT.append(self.TAT[i]-self.PROCESSES[i][2])
-
-        return self.WT
-
-    def CALCULATE_AVG_WT(self):
-        return round(sum(self.WT)/len(self.WT), 2)
-
-    def CALCULATE_AVG_TAT(self):
-        return round(sum(self.TAT)/len(self.TAT), 2)
-
-class Priority(Scheduler):
-    def __init__(self,processes):
+    def __init__(self, processes: list):
+        super().__init__()
         self.PROCESSES = processes
-        self.PROCESSES.sort(key=lambda x: x[3], reverse=True)
-    
+        self.PROCESSES.sort(key=lambda x: (x[1], x[2]))
+
     def CALCULATE_CT(self):
+        self.CT = [0] * len(self.PROCESSES)
         for i in range(len(self.PROCESSES)):
             if i == 0:
-                if self.PROCESSES[i][1] > 0:
-                    state_idle = self.PROCESSES[i][1]
-                    self.CT.append(self.PROCESSES[i][2]+state_idle)
-                else:
-                    self.CT.append(self.PROCESSES[i][2])
+                self.CT[i] = self.PROCESSES[i][1] + self.PROCESSES[i][2]
             else:
                 if self.CT[i-1] < self.PROCESSES[i][1]:
-                    idle_state = self.PROCESSES[i][1] - self.CT[i-1]
-                    self.CT.append(self.CT[i-1]+self.PROCESSES[i][2]+idle_state)
+                    self.CT[i] = self.PROCESSES[i][1] + self.PROCESSES[i][2]
                 else:
-                    self.CT.append(self.CT[i-1]+self.PROCESSES[i][2])
+                    self.CT[i] = self.CT[i-1] + self.PROCESSES[i][2]
         return self.CT
 
-    
     def CALCULATE_TAT(self):
         for i in range(len(self.PROCESSES)):
             self.TAT.append(self.CT[i]-self.PROCESSES[i][1])
-        
-        return self.TAT
 
     def CALCULATE_WT(self):
         for i in range(len(self.PROCESSES)):
             self.WT.append(self.TAT[i]-self.PROCESSES[i][2])
 
+    def CALCULATE_AVG_WT(self):
+        return round(sum(self.WT)/len(self.WT), 2)
+
+    def CALCULATE_AVG_TAT(self):
+        return round(sum(self.TAT)/len(self.TAT), 2)
+
+    def output(self):
+        self.CALCULATE_CT()
+        self.CALCULATE_TAT()
+        self.CALCULATE_WT()
+        return {
+            "CT": self.CT,
+            "TAT": self.TAT,
+            "WT": self.WT,
+            "AVG_WT": self.CALCULATE_AVG_WT(),
+            "AVG_TAT": self.CALCULATE_AVG_TAT()
+        }
+class RoundRobin(Scheduler):
+    def __init__(self, processes: list, quantum: int):
+        super().__init__()
+        self.PROCESSES = processes
+        self.QUANTUM = quantum
+        self.BT = [i[2] for i in self.PROCESSES]
+        self.PROCESS_ID = [i[0] for i in self.PROCESSES]
+        self.WT = [0] * len(self.PROCESSES)
+        self.TAT = [0] * len(self.PROCESSES)
+        self.CT = [0] * len(self.PROCESSES)
+        self.RT = [i for i in self.BT]
+    
+    def CALCULATE_CT(self):
+        t = 0
+        while(True):
+            done = True
+            for i in range(len(self.PROCESSES)):
+                if self.RT[i] > 0:
+                    done = False
+                    if self.RT[i] > self.QUANTUM:
+                        t += self.QUANTUM
+                        self.RT[i] -= self.QUANTUM
+                    else:
+                        t = t + self.RT[i]
+                        self.WT[i] = t - self.BT[i]
+                        self.RT[i] = 0
+            if done == True:
+                break
+        self.CT = [self.WT[i] + self.BT[i] for i in range(len(self.PROCESSES))]
+        return self.CT
+
+    def CALCULATE_TAT(self):
+        self.TAT = [self.CT[i] - self.PROCESSES[i][1] for i in range(len(self.PROCESSES))]
+        return self.TAT
+
+    def CALCULATE_WT(self):
         return self.WT
 
     def CALCULATE_AVG_WT(self):
@@ -195,95 +163,100 @@ class Priority(Scheduler):
     def CALCULATE_AVG_TAT(self):
         return round(sum(self.TAT)/len(self.TAT), 2)
 
+    def output(self):
+        self.CALCULATE_CT()
+        self.CALCULATE_TAT()
+        return {
+            "CT": self.CT,
+            "TAT": self.TAT,
+            "WT": self.WT,
+            "AVG_WT": self.CALCULATE_AVG_WT(),
+            "AVG_TAT": self.CALCULATE_AVG_TAT()
+        }
+        
 
 
-def unit_test(processes, wt, tat, ct):
-    for i in range(len(processes)):
-        print(f"Process: {processes[i][0]}")
-        print(f"AT: {processes[i][1]}")
-        print(f"BT: {processes[i][2]}")
-        print(f"WT: {wt[i]}")
-        print(f"TAT: {tat[i]}")
-        print(f"CT: {ct[i]}")
-        print("")
-    print(f"Average WT: {sum(wt)/len(wt)}")
-    print(f"Average TAT: {sum(tat)/len(tat)}")
+#
+class Priority(Scheduler):
+    def __init__(self, processes: list):
+        super().__init__()
+        self.PROCESSES = processes
+        self.PROCESSES.sort(key=lambda x: (x[3], x[1]))
+
+    def CALCULATE_CT(self):
+        self.CT = [0] * len(self.PROCESSES)
+        for i in range(len(self.PROCESSES)):
+            if i == 0:
+                self.CT[i] = self.PROCESSES[i][1] + self.PROCESSES[i][2]
+            else:
+                if self.CT[i-1] < self.PROCESSES[i][1]:
+                    self.CT[i] = self.PROCESSES[i][1] + self.PROCESSES[i][2]
+                else:
+                    self.CT[i] = self.CT[i-1] + self.PROCESSES[i][2]
+
+    def CALCULATE_TAT(self):
+        for i in range(len(self.PROCESSES)):
+            self.TAT.append(self.CT[i] - self.PROCESSES[i][1])
+
+    def CALCULATE_WT(self):
+        for i in range(len(self.PROCESSES)):
+            self.WT.append(self.TAT[i] - self.PROCESSES[i][2])
+
+    def CALCULATE_AVG_WT(self):
+        return round(sum(self.WT) / len(self.WT), 2)
+
+    def CALCULATE_AVG_TAT(self):
+        return round(sum(self.TAT) / len(self.TAT), 2)
+
+    def output(self):
+        self.CALCULATE_CT()
+        self.CALCULATE_TAT()
+        self.CALCULATE_WT()
+        return {
+            "CT": self.CT,
+            "TAT": self.TAT,
+            "WT": self.WT,
+            "AVG_WT": self.CALCULATE_AVG_WT(),
+            "AVG_TAT": self.CALCULATE_AVG_TAT()
+        }
+
+#
 
 
-    
-
-if __name__=="__main__":
-    print()
-    print("FCFS ALgorithm")
-    print()
-    strategy = FCFS()
-    from random import randint
-    strategy.PROCESSES.append(["P"+str(1), randint(1,8),randint(1,8)])
-    strategy.PROCESSES.append(["P"+str(2), randint(1,8),randint(1,8)])
-    strategy.PROCESSES.append(["P"+str(3), randint(1,8),randint(1,8)])
-    strategy.PROCESSES.append(["P"+str(4), randint(1,8),randint(1,8)])
-    strategy.PROCESSES.append(["P"+str(5), randint(1,8),randint(1,8)])
-    print(strategy.PROCESSES)
-    print(strategy.CALCULATE_CT(),
-    strategy.CALCULATE_TAT(),
-    strategy.CALCULATE_WT(),
-    strategy.CALCULATE_AVG_WT(),
-    strategy.CALCULATE_AVG_TAT())
-
-    unit_test(strategy.PROCESSES,strategy.WT, strategy.TAT, strategy.CT)
-
-    print("SJF ALgorithm")
-    strategy = SJF()
-    from random import randint
-    strategy.PROCESSES.append(["P"+str(1), randint(1,8),randint(1,8)])
-    strategy.PROCESSES.append(["P"+str(2), randint(1,8),randint(1,8)])
-    strategy.PROCESSES.append(["P"+str(3), randint(1,8),randint(1,8)])
-    strategy.PROCESSES.append(["P"+str(4), randint(1,8),randint(1,8)])
-    strategy.PROCESSES.append(["P"+str(5), randint(1,8),randint(1,8)])
-    print(strategy.PROCESSES)
-    print(strategy.CALCULATE_CT(),
-    strategy.CALCULATE_TAT(),
-    strategy.CALCULATE_WT(),
-    strategy.CALCULATE_AVG_WT(),
-    strategy.CALCULATE_AVG_TAT())
-
-    unit_test(strategy.PROCESSES,strategy.WT, strategy.TAT, strategy.CT)
+# processes = [("P1", 0, 8), ("P2", 1, 4), ("P3", 2, 9), ("P4", 3, 5)]
+# quantum = 3
+# rr = RoundRobin(processes, quantum)
+# print(rr.output())
 
 
-    print()
-    print("RoundRobin ALgorithm")
-    print()
-    strategy = RoundRobin(2)
-    from random import randint
-    strategy.PROCESSES.append(["P"+str(1), randint(1,8),randint(1,8)])
-    strategy.PROCESSES.append(["P"+str(2), randint(1,8),randint(1,8)])
-    strategy.PROCESSES.append(["P"+str(3), randint(1,8),randint(1,8)])
-    strategy.PROCESSES.append(["P"+str(4), randint(1,8),randint(1,8)])
-    strategy.PROCESSES.append(["P"+str(5), randint(1,8),randint(1,8)])
-    
-    print(strategy.PROCESSES)
-    print(strategy.CALCULATE_CT(),
-    strategy.CALCULATE_TAT(),
-    strategy.CALCULATE_WT(),
-    strategy.CALCULATE_AVG_WT(),
-    strategy.CALCULATE_AVG_TAT())
+# Creating a list of processes with their Process Number, arrival time and burst time.
+processes = [[1, 0, 3], [2, 2, 6], [3, 4, 4], [4, 6, 5]]
 
-    unit_test(strategy.PROCESSES,strategy.WT, strategy.TAT, strategy.CT)
+# FCFS instance
+fcfs = FCFS(processes)
+print("FCFS:", fcfs.output())
 
-    print()
-    print("Priority ALgorithm")
-    print()
-    from random import randint
-    processes = []
-    processes.append(["P"+str(1), randint(1,8),randint(1,8), randint(1,4)])
-    processes.append(["P"+str(2), randint(1,8),randint(1,8), randint(1,4)])
-    processes.append(["P"+str(3), randint(1,8),randint(1,8), randint(1,4)])
+# SJF instance
+sjf = SJF(processes)
+print("SJF:", sjf.output())
 
-    strategy = Priority(processes)
-    print(strategy.CALCULATE_CT())
-    strategy.CALCULATE_TAT()
-    strategy.CALCULATE_WT()
-    strategy.CALCULATE_AVG_WT()
-    strategy.CALCULATE_AVG_TAT()
+# Round Robin instance
+quantum = 2
+rr = RoundRobin(processes, quantum)
+print("Round Robin:", rr.output())
 
-    unit_test(strategy.PROCESSES,strategy.WT, strategy.TAT, strategy.CT)
+
+# Creating a list of processes with their arrival time, burst time and priority
+processes = [("p1", 0, 10, 3), ("p2", 1, 5, 2), ("p3", 2, 8, 1)]
+
+# Creating an object of the Priority class
+scheduler = Priority(processes)
+
+
+output = scheduler.output()
+print("Priority")
+print("Completion Time: ", output["CT"])
+print("Turnaround Time: ", output["TAT"])
+print("Waiting Time: ", output["WT"])
+print("Average Waiting Time: ", output["AVG_WT"])
+print("Average Turnaround Time: ", output["AVG_TAT"])
