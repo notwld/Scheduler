@@ -223,40 +223,40 @@ class Priority(Scheduler):
 #
 
 
-# processes = [("P1", 0, 8), ("P2", 1, 4), ("P3", 2, 9), ("P4", 3, 5)]
-# quantum = 3
+# # processes = [("P1", 0, 8), ("P2", 1, 4), ("P3", 2, 9), ("P4", 3, 5)]
+# # quantum = 3
+# # rr = RoundRobin(processes, quantum)
+# # print(rr.output())
+
+
+# # Creating a list of processes with their Process Number, arrival time and burst time.
+# processes = [[1, 0, 3], [2, 2, 6], [3, 4, 4], [4, 6, 5]]
+
+# # FCFS instance
+# fcfs = FCFS(processes)
+# print("FCFS:", fcfs.output())
+
+# # SJF instance
+# sjf = SJF(processes)
+# print("SJF:", sjf.output())
+
+# # Round Robin instance
+# quantum = 2
 # rr = RoundRobin(processes, quantum)
-# print(rr.output())
+# print("Round Robin:", rr.output())
 
 
-# Creating a list of processes with their Process Number, arrival time and burst time.
-processes = [[1, 0, 3], [2, 2, 6], [3, 4, 4], [4, 6, 5]]
+# # Creating a list of processes with their arrival time, burst time and priority
+# processes = [("p1", 0, 10, 3), ("p2", 1, 5, 2), ("p3", 2, 8, 1)]
 
-# FCFS instance
-fcfs = FCFS(processes)
-print("FCFS:", fcfs.output())
-
-# SJF instance
-sjf = SJF(processes)
-print("SJF:", sjf.output())
-
-# Round Robin instance
-quantum = 2
-rr = RoundRobin(processes, quantum)
-print("Round Robin:", rr.output())
+# # Creating an object of the Priority class
+# scheduler = Priority(processes)
 
 
-# Creating a list of processes with their arrival time, burst time and priority
-processes = [("p1", 0, 10, 3), ("p2", 1, 5, 2), ("p3", 2, 8, 1)]
-
-# Creating an object of the Priority class
-scheduler = Priority(processes)
-
-
-output = scheduler.output()
-print("Priority")
-print("Completion Time: ", output["CT"])
-print("Turnaround Time: ", output["TAT"])
-print("Waiting Time: ", output["WT"])
-print("Average Waiting Time: ", output["AVG_WT"])
-print("Average Turnaround Time: ", output["AVG_TAT"])
+# output = scheduler.output()
+# print("Priority")
+# print("Completion Time: ", output["CT"])
+# print("Turnaround Time: ", output["TAT"])
+# print("Waiting Time: ", output["WT"])
+# print("Average Waiting Time: ", output["AVG_WT"])
+# print("Average Turnaround Time: ", output["AVG_TAT"])
