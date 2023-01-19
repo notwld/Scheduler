@@ -4,6 +4,12 @@ Scheduling algorithms tell the CPU which will be the next process to have CPU ti
 
 # Getting Started
 
+Clone this repo in your local machine using,
+
+```bash
+git clone https://github.com/notwld/Scheduler
+```
+
 To run the backend server, run these commands
 
 ```bash
