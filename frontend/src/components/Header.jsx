@@ -1,7 +1,6 @@
 import { Box, Container, Typography } from '@mui/material'
 import React from 'react'
 import { LightMode,DarkMode } from '@mui/icons-material'
-import Button from '@mui/material/Button';
 import BasicModal from './Modal';
 
 export default function Header({ darkMode, toggleDarkMode}) {

@@ -5,10 +5,11 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
+import { Link as RouterLink } from 'react-router-dom'
 
 
 
-export default function BasicCard({title, description}) {
+export default function BasicCard({title, description,route}) {
   return (
     <Card sx={{ width: "18rem" }} variant="outlined">
         <CardActionArea>
@@ -22,7 +23,10 @@ export default function BasicCard({title, description}) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Run</Button>
+        {/* <RouterLink to={route} style={{textDecoration:"none", marginLeft:"auto"}} >
+        <Button size="small" variant="outlined">Try</Button>
+        </RouterLink> */}
+        <Button size="small" sx={{textDecoration:"none", marginLeft:"auto"}} variant="outlined" component={RouterLink} to={route}>Try</Button>
       </CardActions>
       </CardActionArea>
     </Card>
