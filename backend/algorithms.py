@@ -276,56 +276,56 @@ class RoundRobin(Scheduler):
         }
     
 
-print("Round Robin")
-processes = [['P1', 0, 8, 2], ['P2', 1, 4, 1], ['P3', 2, 9, 3], ['P4', 3, 5, 4]]
-rr_scheduler = RoundRobin(processes,4)
-output3 = rr_scheduler.output()
-print(output3)
-print("Process Name:", output3["Process Name"])
-print("Arrival Time:", output3["Arrival Time"])
-print("Time Quantum:",output3["Time Quantum"])
-print("Burst Time:", output3["Burst Time"])
-print("Completion Time:", output3["Completion Time"])
-print("Turnaround Time:", output3["Turnaround Time"])
-print("Waiting Time:", output3["Waiting Time"])
-print("AVG Waiting Time:", output3["AVG Waiting Time"])
-print("AVG Turnaround Time:", output3["AVG Turnaround Time"])
+# print("Round Robin")
+# processes = [['P1', 0, 8, 2], ['P2', 1, 4, 1], ['P3', 2, 9, 3], ['P4', 3, 5, 4]]
+# rr_scheduler = RoundRobin(processes,4)
+# output3 = rr_scheduler.output()
+# print(output3)
+# print("Process Name:", output3["Process Name"])
+# print("Arrival Time:", output3["Arrival Time"])
+# print("Time Quantum:",output3["Time Quantum"])
+# print("Burst Time:", output3["Burst Time"])
+# print("Completion Time:", output3["Completion Time"])
+# print("Turnaround Time:", output3["Turnaround Time"])
+# print("Waiting Time:", output3["Waiting Time"])
+# print("AVG Waiting Time:", output3["AVG Waiting Time"])
+# print("AVG Turnaround Time:", output3["AVG Turnaround Time"])
 
 
-# Creating a list of processes with their Process Number, arrival time and burst time.
-#FCFS
-processes = [("p1", 0, 4), ("p2", 1, 2), ("p3", 2, 1)]
-scheduler = FCFS(processes)
-result = scheduler.output()
-print("FCFS: ",result)
+# # Creating a list of processes with their Process Number, arrival time and burst time.
+# #FCFS
+# processes = [("p1", 0, 4), ("p2", 1, 2), ("p3", 2, 1)]
+# scheduler = FCFS(processes)
+# result = scheduler.output()
+# print("FCFS: ",result)
 
-#SJF
-processes1 = [("p1", 3, 3), ("p2", 1, 2), ("p3", 0, 1)]
-scheduler1 = SJF(processes1)
-result1 = scheduler1.output()
-print("SJF: ",result1)
+# #SJF
+# processes1 = [("p1", 3, 3), ("p2", 1, 2), ("p3", 0, 1)]
+# scheduler1 = SJF(processes1)
+# result1 = scheduler1.output()
+# print("SJF: ",result1)
 
-processes = [
-    Process("P1", 0, 5, 3), 
-    Process("P2", 2, 2, 1),  
-    Process("P3", 3, 3, 2),
-    Process("P4", 5, 1, 2) 
-]
+# processes = [
+#     Process("P1", 0, 5, 3), 
+#     Process("P2", 2, 2, 1),  
+#     Process("P3", 3, 3, 2),
+#     Process("P4", 5, 1, 2) 
+# ]
 
-scheduler = PriorityScheduler(processes)
-results = scheduler.output()
+# scheduler = PriorityScheduler(processes)
+# results = scheduler.output()
 
-# print("Priorty: ",results)
-print()
-print("Priority")
-print("Process Name:", results["Process Name"])
-print("Arrival Time:", results["Arrival Time"])
-print("Burst Time:", results["Burst Time"])
-print("Priority:",results["Priority No"])
-print("Start Time:", results["Start Time"])
-print("Completion Time:", results["Completion Time"])
-print("Turnaround Time:", results["Turnaround Time"])
-print("Waiting Time:", results["Waiting Time"])
-print("AVG Waiting Time:", results["AVG Waiting Time"])
-print("AVG Turnaround Time:", results["AVG Turnaround Time"])
+# # print("Priorty: ",results)
+# print()
+# print("Priority")
+# print("Process Name:", results["Process Name"])
+# print("Arrival Time:", results["Arrival Time"])
+# print("Burst Time:", results["Burst Time"])
+# print("Priority:",results["Priority No"])
+# print("Start Time:", results["Start Time"])
+# print("Completion Time:", results["Completion Time"])
+# print("Turnaround Time:", results["Turnaround Time"])
+# print("Waiting Time:", results["Waiting Time"])
+# print("AVG Waiting Time:", results["AVG Waiting Time"])
+# print("AVG Turnaround Time:", results["AVG Turnaround Time"])
 
