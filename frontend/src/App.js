@@ -11,7 +11,7 @@ import RoundRobins from './components/RoundRobins'
 
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const darkTheme = createTheme({
     palette: {
       mode: darkMode ? 'dark' : 'light',

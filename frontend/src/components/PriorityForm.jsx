@@ -7,7 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 
-export default function BasicForm() {
+export default function PriorityForm() {
     const [num, setNum] = React.useState(0)
     const [processes, setProcesses] = React.useState([])
     const [showTable, setShowTable] = React.useState(false)
@@ -24,7 +24,8 @@ export default function BasicForm() {
             newProcesses.push({
                 name: `P${i + 1}`,
                 arrivalTime: "",
-                burstTime: ""
+                burstTime: "",
+                priority: ""
             })
         }
         setProcesses(newProcesses)
@@ -73,6 +74,15 @@ export default function BasicForm() {
                                 placeholder="Enter Burst Time"
                                 onChange={(e) => handleChange(index, e.target.value, "burstTime")}
                             />
+                            <TextField
+                                id={`priority-${index}`}
+                                className='process'
+                                label="Priority"
+                                variant="outlined"
+                                placeholder="Enter Priority"
+                                onChange={(e) => handleChange(index, e.target.value, "priority")}
+                            />
+
                         </div>
                     )
                 })}
@@ -81,7 +91,7 @@ export default function BasicForm() {
                     ></Box>}
             </Box>
             {showTable && <Container sx={{ marginTop: "35px" }} >
-
+                
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
@@ -89,6 +99,7 @@ export default function BasicForm() {
                                 <TableCell>Process Name</TableCell>
                                 <TableCell>Arrival Time</TableCell>
                                 <TableCell>Burst Time</TableCell>
+                                <TableCell>Priority</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -98,6 +109,7 @@ export default function BasicForm() {
                                         <TableCell>{p.name}</TableCell>
                                         <TableCell>{p.arrivalTime}</TableCell>
                                         <TableCell>{p.burstTime}</TableCell>
+                                        <TableCell>{p.priority}</TableCell>
                                     </TableRow>
                                 )
                             })}
