@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <table>
+    <tr>
+      <th>Process Name</th>
+      <th>Arrival Time</th>
+      <th>Burst Time</th>
+      <th>Completion Time</th>
+      <th>Turnaround Time</th>
+      <th>Waiting Time</th>
+    </tr>
+    {% for i in range(0, output['Process Name']|length) %}
+
+    <tr>
+      <td>{{ output['Process Name'][i] }}</td>
+      <td>{{ output['Arrival Time'][i] }}</td>
+      <td>{{ output['Burst Time'][i] }}</td>
+      <td>{{ output['Completion Time'][i] }}</td>
+      <td>{{ output['Turnaround Time'][i] }}</td>
+      <td>{{ output['Waiting Time'][i] }}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <th>AVG Turnaround Time</th>
+      <td>{{ output['AVG Turnaround Time'] }}</td>
+      <th>AVG Waiting Time</th>
+      <td>{{ output['AVG Waiting Time'] }}</td>
+    </tr>
+  </table>
+  
+  
+</body>
+</html>
