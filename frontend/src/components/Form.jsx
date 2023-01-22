@@ -2,10 +2,12 @@ import React from 'react'
 import { TextField, Box, Container, Button } from '@mui/material'
 import { useNavigate } from "react-router-dom";
 
-export default function BasicForm() {
+export default function BasicForm({type}) {
+    console.log(type)
     const navigate = useNavigate();
     const [num, setNum] = React.useState(0)
     const [processes, setProcesses] = React.useState([])
+    const [output, setOutput] = React.useState(null)
     const handleChange = (index, value, field) => {
         const updatedProcesses = [...processes];
         updatedProcesses[index][field] = value;
@@ -24,7 +26,7 @@ export default function BasicForm() {
         setProcesses(newProcesses)
     }, [num])
 
-    const runProcesses = () => {
+    const runProcesses = async () => {
         const valid = processes.every(p => p.arrivalTime !== "" && p.burstTime !== "")
         if (!valid) {
             alert("Please fill in all the fields")
@@ -36,8 +38,26 @@ export default function BasicForm() {
             alert("Please enter valid numbers")
             return
         }
-
-        navigate("/output", { state: { processes } })
+        
+        await fetch(`http://localhost:5000/${type}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(processes)
+        }).then(res => res.json())
+        .then(data => {
+            setOutput(data)
+            // console.log(data)
+             navigate("/output", {
+                state: {
+                    data
+                }
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     return (
@@ -50,7 +70,7 @@ export default function BasicForm() {
                     justifyContent: "center",
                     alignItems: "center"
                 }}
-                Validate
+                noValidate
                 autoComplete="off">
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                     <TextField id="outlined-basic" label="Number of Processes" variant="outlined" onChange={(e) => setNum(e.target.value)} />

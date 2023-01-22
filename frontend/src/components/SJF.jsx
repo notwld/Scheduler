@@ -7,7 +7,7 @@ export default class SJF extends Component {
     return (
         <Box sx={{marginTop:"40px"}}>
         <Typography variant="h3" sx={{textAlign:"center"}}>Shortest Job First</Typography>
-        <BasicForm />
+        <BasicForm type={"sjf"} />
       </Box>
     )
   }

@@ -7,7 +7,7 @@ export default class FCFS extends Component {
     return (
       <Box sx={{marginTop:"40px"}}>
         <Typography variant="h3" sx={{textAlign:"center"}}>First Come First Serve</Typography>
-        <BasicForm />
+        <BasicForm type={"fcfs"} />
       </Box>
     )
   }

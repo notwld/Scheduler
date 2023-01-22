@@ -27,7 +27,7 @@ export default function PriorityForm() {
         setProcesses(newProcesses)
     }, [num])
 
-    const runProcesses = () => {
+    const runProcesses = async () => {
         const valid = processes.every(p => p.arrivalTime !== "" && p.burstTime !== "" && p.priority !== "")
         if (!valid) {
             alert("Please fill in all the fields")
@@ -39,7 +39,26 @@ export default function PriorityForm() {
             alert("Please enter valid numbers")
             return
         }
-        navigate("/output", { state: { processes } })
+        await fetch(`http://localhost:5000/priority`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(processes)
+        }).then(res => res.json())
+        .then(data => {
+            console.log(data)
+            navigate("/output", {
+                state: {
+                    data
+                }
+            })
+        }
+        )
+        .catch(err => {
+            console.log(err)
+        }
+        )
 
     }
 
