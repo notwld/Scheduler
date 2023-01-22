@@ -88,14 +88,14 @@ class FCFS(Scheduler):
         self.CALCULATE_TAT()
         self.CALCULATE_WT()
         return {
-        "Process Name": self.PN,
-        "Arrival Time": self.AT,
-        "Burst Time": self.BT,
-        "Completion Time": self.CT,
-        "Turnaround Time": self.TAT,
-        "Waiting Time": self.WT,
-        "AVG Waiting Time": self.CALCULATE_AVG_WT(),
-        "AVG Turnaround Time": self.CALCULATE_AVG_TAT()
+        "pid": self.PN,
+        "arrivalTime": self.AT,
+        "burstTime": self.BT,
+        "completionTime": self.CT,
+        "turnAroundTime": self.TAT,
+        "waitingTime": self.WT,
+        "avgWT": self.CALCULATE_AVG_WT(),
+        "avgTAT": self.CALCULATE_AVG_TAT()
         }
 
 
@@ -140,14 +140,14 @@ class SJF(Scheduler):
         self.CALCULATE_TAT()
         self.CALCULATE_WT()
         return {
-        "Process Name": self.PN,
-        "Arrival Time": self.AT,
-        "Burst Time": self.BT,
-        "Completion Time": self.CT,
-        "Turnaround Time": self.TAT,
-        "Waiting Time": self.WT,
-        "AVG Waiting Time": self.CALCULATE_AVG_WT(),
-        "AVG Turnaround Time": self.CALCULATE_AVG_TAT()
+        "pid": self.PN,
+        "arrivalTime": self.AT,
+        "burstTime": self.BT,
+        "completionTime": self.CT,
+        "turnAroundTime": self.TAT,
+        "waitingTime": self.WT,
+        "avgWT": self.CALCULATE_AVG_WT(),
+        "avgTAT": self.CALCULATE_AVG_TAT()
         }
 
 
@@ -196,16 +196,15 @@ class PriorityScheduler(Scheduler):
         self.CALCULATE_TAT()
         self.CALCULATE_WT()
         return {
-        "Process Name": self.PN,
-        "Arrival Time": self.AT,
-        "Burst Time": self.BT,
-        "Priority No": self.PR,
-        "Start Time": [p.start_time for p in self.PROCESSES],
-        "Completion Time": self.CT,
-        "Turnaround Time": self.TAT,
-        "Waiting Time": self.WT,
-        "AVG Waiting Time": self.CALCULATE_AVG_WT(),
-        "AVG Turnaround Time": self.CALCULATE_AVG_TAT()
+        "pid": self.PN,
+        "arrivalTime": self.AT,
+        "burstTime": self.BT,
+        "priority": self.PR,
+        "completionTime": self.CT,
+        "turnAroundTime": self.TAT,
+        "waitingTime": self.WT,
+        "avgWT": self.CALCULATE_AVG_WT(),
+        "avgTAT": self.CALCULATE_AVG_TAT()
         }
 
 class RoundRobin(Scheduler):
@@ -264,15 +263,14 @@ class RoundRobin(Scheduler):
         self.CALCULATE_TAT()
         self.CALCULATE_WT()
         return {
-            "Process Name": self.PN,
-            "Arrival Time": self.AT,
-            "Burst Time": self.temp,
-            "Time Quantum": self.q,
-            "Completion Time": self.CT,
-            "Turnaround Time": self.TAT,
-            "Waiting Time": self.WT,
-            "AVG Waiting Time": self.CALCULATE_AVG_WT(),
-            "AVG Turnaround Time": self.CALCULATE_AVG_TAT()
+        "pid": self.PN,
+        "arrivalTime": self.AT,
+        "burstTime": self.BT,
+        "completionTime": self.CT,
+        "turnAroundTime": self.TAT,
+        "waitingTime": self.WT,
+        "avgWT": self.CALCULATE_AVG_WT(),
+        "avgTAT": self.CALCULATE_AVG_TAT()
         }
     
 
