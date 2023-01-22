@@ -1,48 +1,51 @@
 import React from 'react'
-import { TextField, Box, Container, Button} from '@mui/material'
-import { useNavigate } from "react-router-dom";
+import { Container, Box, TextField, Button } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
-
-export default function PriorityForm() {
+export default function RRForm() {
     const navigate = useNavigate();
     const [num, setNum] = React.useState(0)
     const [processes, setProcesses] = React.useState([])
-    const handleChange = (index, value, field) => {
-        const updatedProcesses = [...processes];
-        updatedProcesses[index][field] = value;
-        setProcesses(updatedProcesses);
-
+    const [quantum, setQuantum] = React.useState(0)
+    const handleChange = (index, value, key) => {
+        let newProcesses = [...processes];
+        newProcesses[index][key] = value;
+        setProcesses(newProcesses);
     }
-
     React.useEffect(() => {
         const newProcesses = []
         for (let i = 0; i < num; i++) {
             newProcesses.push({
                 name: `P${i + 1}`,
                 arrivalTime: "",
-                burstTime: "",
-                priority: ""
+                burstTime: ""
             })
         }
         setProcesses(newProcesses)
     }, [num])
-
-    const runProcesses = () => {
-        const valid = processes.every(p => p.arrivalTime !== "" && p.burstTime !== "" && p.priority !== "")
-        if (!valid) {
-            alert("Please fill in all the fields")
-            return
-        }
-        const isNumber = processes.every(p => !isNaN(p.arrivalTime) && !isNaN(p.burstTime) && !isNaN(p.priority))
-        const isPositive = processes.every(p => p.arrivalTime >= 0 && p.burstTime >= 0 && p.priority >= 0)
-        if (!isNumber || !isPositive) {
-            alert("Please enter valid numbers")
-            return
-        }
-        navigate("/output", { state: { processes } })
-
+    
+    const handleQuantumChange = (e) => {
+        setQuantum(e.target.value);
     }
+    
+    const runRoundRobin = () => {
+        const valid = processes.every(p => p.arrivalTime !== "" && p.burstTime !== "") && quantum !== "";
+        if (!valid) {
+            alert("Please enter all the values");
+            return;
+        }
+        const isPositive = processes.every(p => p.arrivalTime >= 0 && p.burstTime >= 0) && quantum >= 0;
+        const isNumber = !isNaN(quantum) && processes.every(p => !isNaN(p.arrivalTime) && !isNaN(p.burstTime));
+        if (!isPositive || !isNumber) {
+            alert("Please enter valid values");
+            return;
+        }
 
+
+        navigate("/output", { state: { processes, quantum } });
+    }
+    
     return (
         <Container sx={{ margin: "20px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
             <Box component="form"
@@ -85,24 +88,20 @@ export default function PriorityForm() {
                                 placeholder="Enter Burst Time"
                                 onChange={(e) => handleChange(index, e.target.value, "burstTime")}
                             />
-                            <TextField
-                                id={`priority-${index}`}
-                                className='process'
-                                label="Priority"
-                                variant="outlined"
-                                placeholder="Enter Priority"
-                                onChange={(e) => handleChange(index, e.target.value, "priority")}
-                            />
-
                         </div>
                     )
                 })}
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <TextField id="outlined-basic" label="Quantum" variant="outlined" onChange={handleQuantumChange} />
+                </div>
                 {num > 0 && <Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                    <Button variant="contained" onClick={runProcesses}>Run</Button
-                    ></Box>}
+                    <Button variant="contained" onClick={runRoundRobin}>Run</Button>
+                </Box>}
             </Box>
-            
-        </Container>
+     
+</Container>
 
-    )
+)
 }
+
+

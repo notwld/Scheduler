@@ -1,21 +1,15 @@
 import React from 'react'
-import { TextField, Box, Container, Button, TableContainer, Table } from '@mui/material'
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-
+import { TextField, Box, Container, Button } from '@mui/material'
+import { useNavigate } from "react-router-dom";
 
 export default function BasicForm() {
+    const navigate = useNavigate();
     const [num, setNum] = React.useState(0)
     const [processes, setProcesses] = React.useState([])
-    const [showTable, setShowTable] = React.useState(false)
     const handleChange = (index, value, field) => {
         const updatedProcesses = [...processes];
         updatedProcesses[index][field] = value;
         setProcesses(updatedProcesses);
-
     }
 
     React.useEffect(() => {
@@ -31,8 +25,19 @@ export default function BasicForm() {
     }, [num])
 
     const runProcesses = () => {
-        console.log(processes)
-        setShowTable(true)
+        const valid = processes.every(p => p.arrivalTime !== "" && p.burstTime !== "")
+        if (!valid) {
+            alert("Please fill in all the fields")
+            return
+        }
+        const isNumber = processes.every(p => !isNaN(p.arrivalTime) && !isNaN(p.burstTime))
+        const isPositive = processes.every(p => p.arrivalTime >= 0 && p.burstTime >= 0)
+        if (!isNumber || !isPositive) {
+            alert("Please enter valid numbers")
+            return
+        }
+
+        navigate("/output", { state: { processes } })
     }
 
     return (
@@ -40,8 +45,12 @@ export default function BasicForm() {
             <Box component="form"
                 sx={{
                     '& .MuiTextField-root': { m: 1, width: '25ch' },
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center"
                 }}
-                noValidate
+                Validate
                 autoComplete="off">
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                     <TextField id="outlined-basic" label="Number of Processes" variant="outlined" onChange={(e) => setNum(e.target.value)} />
@@ -80,32 +89,7 @@ export default function BasicForm() {
                     <Button variant="contained" onClick={runProcesses}>Run</Button
                     ></Box>}
             </Box>
-            {showTable && <Container sx={{ marginTop: "35px" }} >
-
-                <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Process Name</TableCell>
-                                <TableCell>Arrival Time</TableCell>
-                                <TableCell>Burst Time</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {processes.map((p, index) => {
-                                return (
-                                    <TableRow key={index}>
-                                        <TableCell>{p.name}</TableCell>
-                                        <TableCell>{p.arrivalTime}</TableCell>
-                                        <TableCell>{p.burstTime}</TableCell>
-                                    </TableRow>
-                                )
-                            })}
-                        </TableBody>
-
-                    </Table>
-                </TableContainer>
-            </Container>}
+            
         </Container>
 
     )
