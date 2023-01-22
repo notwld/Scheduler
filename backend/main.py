@@ -42,11 +42,12 @@ def sjf():
     return jsonify(scheduler.output())
 
 
-@app.route("/rr", methods=["GET"])
+@app.route("/rr", methods=["GET", "POST"])
 def rr():
-    processes = [['P1', 0, 8, 2], ['P2', 1, 4, 1],
-                 ['P3', 2, 9, 3], ['P4', 3, 5, 4]]
-    scheduler = RoundRobin(processes, 4)
+    data = request.json
+    processes = dictionary_to_list(data['processes'])
+    quantum = data['quantum']
+    scheduler = RoundRobin(processes, int(quantum))
     return jsonify(scheduler.output())
 
 
