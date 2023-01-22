@@ -29,7 +29,7 @@ export default function RRForm() {
         setQuantum(e.target.value);
     }
     
-    const runRoundRobin = () => {
+    const runRoundRobin = async () => {
         const valid = processes.every(p => p.arrivalTime !== "" && p.burstTime !== "") && quantum !== "";
         if (!valid) {
             alert("Please enter all the values");
@@ -41,9 +41,28 @@ export default function RRForm() {
             alert("Please enter valid values");
             return;
         }
+        await fetch(`http://localhost:5000/rr`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                processes,
+                quantum
+            })
+        }).then(res => res.json())
+            .then(data => {
+                console.log(data)
+                navigate("/output", {
+                    state: {
+                        data,
+                        quantum
+                    }
+                })
+            }
+            )
+            .catch(err => console.log(err))
 
-
-        navigate("/output", { state: { processes, quantum } });
     }
     
     return (

@@ -27,11 +27,10 @@ export default function Home() {
 
     ]
     return (
-        <Container style={{ marginTop: "30px", marginBottom: "20px", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
+        <Container style={{ marginTop: "30px", marginBottom: "20px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px" }}>
             {algorithms.map((algorithm, index) => (
                 <Card key={index} title={algorithm.title} description={algorithm.description} route={algorithm.route} />
             ))}
-
         </Container>
     )
 }

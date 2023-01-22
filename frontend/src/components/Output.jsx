@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 function Output() {
     const [processes, setProcesses] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(false);
-    const {state} = useLocation();
+    const { state } = useLocation();
     console.log(state);
     const [pid, setPid] = React.useState(state.data.pid);
     const [arrivalTime, setArrivalTime] = React.useState(state.data.arrivalTime);
@@ -26,11 +26,11 @@ function Output() {
 
 
     return (
-        <Container sx={{ margin: "20px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+        <Container sx={{ margin: "20px", display: "flex", flexDirection: ["column", "row"], justifyContent: "center", alignItems: "center" }}>
             <Box>
                 <h2>Output</h2>
                 <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <Table sx={{ minWidth: ["100%", 650] }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <TableCell>Process Name</TableCell>
@@ -53,7 +53,7 @@ function Output() {
                                     </TableCell>
                                     <TableCell>{arrivalTime[index]}</TableCell>
                                     <TableCell>{burstTime[index]}</TableCell>
-                                    { priority.length > 0 && <TableCell>{priority[index]}</TableCell>}
+                                    {priority.length > 0 && <TableCell>{priority[index]}</TableCell>}
                                     <TableCell>{completionTime[index]}</TableCell>
                                     <TableCell>{turnaroundTime[index]}</TableCell>
                                     <TableCell>{waitingTime[index]}</TableCell>
@@ -62,9 +62,9 @@ function Output() {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center", alignItems: ["center", "flex-start"] }}>
                     <Typography variant="span">Average Waiting Time: {averageWT} ms</Typography>
-                                <Divider sx={{ margin: "0 10px" }} orientation="vertical" flexItem />
+                    <Divider sx={{ margin: "0 10px" }} orientation="vertical" flexItem />
                     <Typography variant="span">Average Turnaround Time: {averageTT} ms</Typography>
                 </Box>
             </Box>

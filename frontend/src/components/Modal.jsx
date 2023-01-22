@@ -43,7 +43,7 @@ export default function BasicModal({ open, handleClose }) {
                         Made with ❤️ by:
                         <Box >
                             {/* grid mui list  */}
-                            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', display: "grid", gridTemplateColumns: "1fr 1fr", gridGap: "20px" }}>
+                            <List sx={{ width: '100%', maxWidth: '100%', bgcolor: 'background.paper', display: "grid", gridTemplateColumns: "1fr 1fr", gridGap: "20px", '@media (max-width: 600px)': { gridTemplateColumns: "1fr",justifyContent:"center",alignItems:"center" } }}>
                                 {us.map((user) => (
                                     <ListItem key={user.name}>
                                         <ListItemAvatar>
