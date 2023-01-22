@@ -17,6 +17,7 @@ function Output() {
     const [averageWT, setAverageWT] = React.useState(state.data.avgWT);
     const [averageTT, setAverageTT] = React.useState(state.data.avgTAT);
     const [priority, setPriority] = React.useState(state.data.priority || []);
+    const [quantum, setQuantum] = React.useState(state.quantum || 0);
     // console.log(pid);
     // console.log(arrivalTime);
     // console.log(burstTime);
@@ -29,7 +30,9 @@ function Output() {
         <Container sx={{ margin: "20px", display: "flex", flexDirection: ["column", "row"], justifyContent: "center", alignItems: "center" }}>
             <Box>
                 <h2>Output</h2>
+                
                 <TableContainer component={Paper}>
+                
                     <Table sx={{ minWidth: ["100%", 650] }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
@@ -66,6 +69,11 @@ function Output() {
                     <Typography variant="span">Average Waiting Time: {averageWT} ms</Typography>
                     <Divider sx={{ margin: "0 10px" }} orientation="vertical" flexItem />
                     <Typography variant="span">Average Turnaround Time: {averageTT} ms</Typography>
+                    {quantum > 0 && <><Divider sx={{ margin: "0 10px" }} orientation="vertical" flexItem />
+                        <Typography variant="span">Time Quantum: {quantum} ms</Typography></>}
+
+                    
+
                 </Box>
             </Box>
         </Container>

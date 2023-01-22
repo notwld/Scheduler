@@ -39,7 +39,7 @@ export default function PriorityForm() {
             alert("Please enter valid numbers")
             return
         }
-        await fetch(`http://localhost:5000/priority`, {
+        await fetch(`https://schedular.herokuapp.com/priority`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

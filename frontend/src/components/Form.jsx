@@ -39,7 +39,7 @@ export default function BasicForm({ type }) {
             return
         }
 
-        await fetch(`http://localhost:5000/${type}`, {
+        await fetch(`https://schedular.herokuapp.com/${type}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

@@ -41,7 +41,7 @@ export default function RRForm() {
             alert("Please enter valid values");
             return;
         }
-        await fetch(`http://localhost:5000/rr`, {
+        await fetch(`https://schedular.herokuapp.com/rr`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
