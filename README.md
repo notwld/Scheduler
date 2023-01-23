@@ -2,7 +2,7 @@
 
 Scheduling algorithms tell the CPU which will be the next process to have CPU time. The main goal of scheduling algorithms is to Maximize Throughput. Scheduling algorithms can be preemptive and non-preemptive.
 
-![Demo]("https://salad-scheduler.netlify.app")
+[![Demo]](https://salad-scheduler.netlify.app)
 
 # Getting Started
 
