@@ -5,11 +5,11 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import { Link as RouterLink } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 
-
-export default function BasicCard({ title, description, route }) {
+export default function BasicCard({ title, description, route,isThreaded }) {
+    const navigate = useNavigate();
     return (
         <Card sx={{ width: ["100%", "18rem"] }} variant="outlined">
             <CardActionArea>
@@ -22,7 +22,12 @@ export default function BasicCard({ title, description, route }) {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small" sx={{ textDecoration: "none", marginLeft: "auto" }} variant="outlined" component={RouterLink} to={route}>Try</Button>
+                    {/* <Button size="small" sx={{ textDecoration: "none", marginLeft: "auto" }} variant="outlined" component={RouterLink} to={route}>Try</Button> */}
+                    <Button size="small" sx={{ textDecoration: "none", marginLeft: "auto" }} variant="outlined" onClick={() => navigate(route,{
+                        state: {
+                            isThreaded: isThreaded
+                        }
+                    })}>Try</Button>
                 </CardActions>
             </CardActionArea>
         </Card>

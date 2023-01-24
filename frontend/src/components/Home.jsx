@@ -7,29 +7,57 @@ export default function Home() {
         {
             title: "FCFS",
             description: "The first come first serve algorithm is a scheduling algorithm that schedules the processes in the order of their arrival in the ready queue.",
-            route: "/fcfs"
+            route: "/fcfs",
+            isThreaded:false
         },
         {
             title: "SJF",
             description: "The shortest job first algorithm is a scheduling algorithm that schedules the processes in the order of their burst time.",
-            route: "/sjf"
+            route: "/sjf",
+            isThreaded:false
         },
         {
             title: "Priority",
             description: "The priority scheduling algorithm is a scheduling algorithm that schedules the processes in the order of their priority.",
-            route: "/priority"
+            route: "/priority",
+            isThreaded:false
         },
         {
             title: "Round Robin",
             description: "The round robin algorithm is a scheduling algorithm that schedules the processes in the order of their arrival in the ready queue.",
-            route: "/roundrobins"
+            route: "/roundrobins",
+            isThreaded:false
         },
+        {
+            title: "FCFS Threaded",
+            description: "The first come first serve algorithm is a scheduling algorithm that schedules the processes in the order of their arrival in the ready queue.",
+            route: "/fcfs-threaded",
+            isThreaded:true
+        },
+        {
+            title: "SJF Threaded",
+            description: "The shortest job first algorithm is a scheduling algorithm that schedules the processes in the order of their burst time.",
+            route: "/sjf-threaded",
+            isThreaded:true
+        },
+        {
+            title: "Priority Threaded",
+            description: "The priority scheduling algorithm is a scheduling algorithm that schedules the processes in the order of their priority.",
+            route: "/priority-threaded",
+            isThreaded:true
+        },
+        {
+            title: "Round Robin Threaded",
+            description: "The round robin algorithm is a scheduling algorithm that schedules the processes in the order of their arrival in the ready queue.",
+            route: "/roundrobins-threaded",
+            isThreaded:true
+        }
 
     ]
     return (
         <Container style={{ marginTop: "30px", marginBottom: "20px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px" }}>
             {algorithms.map((algorithm, index) => (
-                <Card key={index} title={algorithm.title} description={algorithm.description} route={algorithm.route} />
+                <Card key={index} title={algorithm.title} description={algorithm.description} route={algorithm.route} isThreaded={algorithm.isThreaded} />
             ))}
         </Container>
     )

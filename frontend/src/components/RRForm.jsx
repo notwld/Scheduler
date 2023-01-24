@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom'
 
 export default function RRForm() {
     const navigate = useNavigate();
+    const { state } = useLocation();
     const [num, setNum] = React.useState(0)
     const [processes, setProcesses] = React.useState([])
     const [quantum, setQuantum] = React.useState(0)
@@ -41,7 +42,7 @@ export default function RRForm() {
             alert("Please enter valid values");
             return;
         }
-        await fetch(`https://schedular.herokuapp.com/rr`, {
+        await fetch(`http://127.0.0.1:5000/rr${state.isThreaded===true?"-threaded":""}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -56,7 +57,8 @@ export default function RRForm() {
                 navigate("/output", {
                     state: {
                         data,
-                        quantum
+                        quantum,
+                        isThreaded: state.isThreaded
                     }
                 })
             }
@@ -66,7 +68,8 @@ export default function RRForm() {
     }
     
     return (
-        <Container sx={{ margin: "20px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+            <Container sx={{ margin: "20px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
             <Box component="form"
                 sx={{
                     '& .MuiTextField-root': { m: 1, width: '25ch' },
@@ -119,6 +122,7 @@ export default function RRForm() {
             </Box>
      
 </Container>
+        </div>
 
 )
 }

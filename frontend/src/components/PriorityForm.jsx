@@ -1,10 +1,11 @@
 import React from 'react'
 import { TextField, Box, Container, Button} from '@mui/material'
 import { useNavigate } from "react-router-dom";
-
+import { useLocation } from "react-router-dom";
 
 export default function PriorityForm() {
     const navigate = useNavigate();
+    const { state } = useLocation();
     const [num, setNum] = React.useState(0)
     const [processes, setProcesses] = React.useState([])
     const handleChange = (index, value, field) => {
@@ -39,7 +40,7 @@ export default function PriorityForm() {
             alert("Please enter valid numbers")
             return
         }
-        await fetch(`https://schedular.herokuapp.com/priority`, {
+        await fetch(`http://127.0.0.1:5000/priority${state.isThreaded===true?"-threaded":""}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -50,7 +51,8 @@ export default function PriorityForm() {
             console.log(data)
             navigate("/output", {
                 state: {
-                    data
+                    data,
+                    isThreaded: state.isThreaded
                 }
             })
         }
@@ -63,7 +65,8 @@ export default function PriorityForm() {
     }
 
     return (
-        <Container sx={{ margin: "20px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+            <Container sx={{ margin: "20px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
             <Box component="form"
                 sx={{
                     '& .MuiTextField-root': { m: 1, width: '25ch' },
@@ -122,6 +125,7 @@ export default function PriorityForm() {
             </Box>
             
         </Container>
+        </div>
 
     )
 }

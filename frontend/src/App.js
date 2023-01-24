@@ -33,6 +33,11 @@ function App() {
         <Route path="/roundrobins" element={<RoundRobins />} />
         <Route path="/priority" element={<Priority />} />
         <Route path="/output" element={<Output />} />
+        <Route path="/fcfs-threaded" element={<FCFS />} />
+        <Route path="/sjf-threaded" element={<SJF />} />
+        <Route path="/roundrobins-threaded" element={<RoundRobins />} />
+        <Route path="/priority-threaded" element={<Priority />} />
+        <Route path="/output-threaded" element={<Output />} />
       </Routes>
     </ThemeProvider>
     </BrowserRouter>

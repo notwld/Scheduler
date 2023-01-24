@@ -7,7 +7,6 @@ function Output() {
     const [processes, setProcesses] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(false);
     const { state } = useLocation();
-    console.log(state);
     const [pid, setPid] = React.useState(state.data.pid);
     const [arrivalTime, setArrivalTime] = React.useState(state.data.arrivalTime);
     const [burstTime, setBurstTime] = React.useState(state.data.burstTime);
@@ -18,16 +17,12 @@ function Output() {
     const [averageTT, setAverageTT] = React.useState(state.data.avgTAT);
     const [priority, setPriority] = React.useState(state.data.priority || []);
     const [quantum, setQuantum] = React.useState(state.quantum || 0);
-    // console.log(pid);
-    // console.log(arrivalTime);
-    // console.log(burstTime);
-    // console.log(completionTime);
-    // console.log(waitingTime);
-    // console.log(turnaroundTime);
+
 
 
     return (
-        <Container sx={{ margin: "20px", display: "flex", flexDirection: ["column", "row"], justifyContent: "center", alignItems: "center" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",marginTop:"45px"}}>
+             <Container sx={{ margin: "20px", display: "flex", flexDirection: ["column", "row"], justifyContent: "center", alignItems: "center" }}>
             <Box>
                 <h2>Output</h2>
                 
@@ -65,18 +60,26 @@ function Output() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                 <Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center", alignItems: ["center", "flex-start"] }}>
                     <Typography variant="span">Average Waiting Time: {averageWT} ms</Typography>
                     <Divider sx={{ margin: "0 10px" }} orientation="vertical" flexItem />
                     <Typography variant="span">Average Turnaround Time: {averageTT} ms</Typography>
                     {quantum > 0 && <><Divider sx={{ margin: "0 10px" }} orientation="vertical" flexItem />
                         <Typography variant="span">Time Quantum: {quantum} ms</Typography></>}
-
+                                
+                </Box>
+                    <Box sx={{marginTop:"7px"}}>
+                    {state.isThreaded && <>
                     
+                    <Typography variant="span">Do you know? threading is <span style={{color:"lightgreen"}}>2x</span> faster than normal processing.</Typography></>}
+                    </Box>
+
 
                 </Box>
             </Box>
         </Container>
+        </div>
     )
 }
 

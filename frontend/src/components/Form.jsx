@@ -1,9 +1,10 @@
 import React from 'react'
 import { TextField, Box, Container, Button } from '@mui/material'
 import { useNavigate } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
 export default function BasicForm({ type }) {
-    console.log(type)
+    const { state } = useLocation();
     const navigate = useNavigate();
     const [num, setNum] = React.useState(0)
     const [processes, setProcesses] = React.useState([])
@@ -13,17 +14,21 @@ export default function BasicForm({ type }) {
         updatedProcesses[index][field] = value;
         setProcesses(updatedProcesses);
     }
-
     React.useEffect(() => {
         const newProcesses = []
-        for (let i = 0; i < num; i++) {
-            newProcesses.push({
-                name: `P${i + 1}`,
-                arrivalTime: "",
-                burstTime: ""
-            })
+        if(num<20){
+            for (let i = 0; i < num; i++) {
+                newProcesses.push({
+                    name: `P${i + 1}`,
+                    arrivalTime: "",
+                    burstTime: ""
+                })
+            }
+            setProcesses(newProcesses)
         }
-        setProcesses(newProcesses)
+        else{
+            alert("Please keep the number of processes less than 20")
+        }
     }, [num])
 
     const runProcesses = async () => {
@@ -39,7 +44,7 @@ export default function BasicForm({ type }) {
             return
         }
 
-        await fetch(`https://schedular.herokuapp.com/${type}`, {
+        await fetch(`http://127.0.0.1:5000/${type}${state.isThreaded===true?"-threaded":""}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -51,7 +56,8 @@ export default function BasicForm({ type }) {
                 // console.log(data)
                 navigate("/output", {
                     state: {
-                        data
+                        data,
+                        isThreaded: state.isThreaded
                     }
                 })
             })
@@ -61,58 +67,60 @@ export default function BasicForm({ type }) {
     }
 
     return (
-        <Container sx={{ margin: "20px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", '@media (max-width: 600px)': { flexDirection: "column", alignItems: "center" } }}>
-            <Box component="form"
-                sx={{
-                    '& .MuiTextField-root': { m: 1, width: '25ch' },
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    '@media (max-width: 600px)': { flexDirection: "column", alignItems: "center" }
-                }}
-                noValidate
-                autoComplete="off">
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", '@media (max-width: 600px)': { flexDirection: "column", alignItems: "center" } }}>
-                    <TextField id="outlined-basic" label="Number of Processes" variant="outlined" onChange={(e) => setNum(e.target.value)} />
-                </div>
-                {processes.map((p, index) => {
-                    return (
-                        <div key={index}>
-                            <TextField
-                                id={`process-name-${index}`}
-                                className='process'
-                                label="Process Name"
-                                variant="outlined"
-                                defaultValue={p.name}
-                                onChange={(e) => handleChange(index, e.target.value, "name")}
-                                sx={{ '@media (max-width: 600px)': { width: '100%' } }}
-                            />
-                            <TextField
-                                id={`arrival-time-${index}`}
-                                className='process'
-                                label="Arrival Time"
-                                variant="outlined"
-                                placeholder="Enter Arrival Time"
-                                onChange={(e) => handleChange(index, e.target.value, "arrivalTime")}
-                                sx={{ '@media (max-width: 600px)': { width: '100%' } }}
-                            />
-                            <TextField
-                                id={`burst-time-${index}`}
-                                className='process'
-                                label="Burst Time"
-                                variant="outlined"
-                                placeholder="Enter Burst Time"
-                                onChange={(e) => handleChange(index, e.target.value, "burstTime")}
-                                sx={{ '@media (max-width: 600px)': { width: '100%' } }}
-                            />
-                        </div>
-                    )
-                })}
-                {num > 0 && <Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center", alignItems: "center", '@media (max-width: 600px)': { flexDirection: "column", alignItems: "center" } }}>
-                    <Button variant="contained" onClick={runProcesses}>Run</Button
-                    ></Box>}
-            </Box>
-        </Container>
-    )
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} >
+            <Container sx={{ margin: "20px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", '@media (max-width: 600px)': { flexDirection: "column", alignItems: "center" } }}>
+                <Box component="form"
+                    sx={{
+                        '& .MuiTextField-root': { m: 1, width: '25ch' },
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        '@media (max-width: 600px)': { flexDirection: "column", alignItems: "center" }
+                    }}
+                    noValidate
+                    autoComplete="off">
+                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", '@media (max-width: 600px)': { flexDirection: "column", alignItems: "center" } }}>
+                        <TextField id="outlined-basic" label="Number of Processes" variant="outlined" onChange={(e) => setNum(e.target.value)} />
+                    </div>
+                    {processes.map((p, index) => {
+                        return (
+                            <div key={index}>
+                                <TextField
+                                    id={`process-name-${index}`}
+                                    className='process'
+                                    label="Process Name"
+                                    variant="outlined"
+                                    defaultValue={p.name}
+                                    onChange={(e) => handleChange(index, e.target.value, "name")}
+                                    sx={{ '@media (max-width: 600px)': { width: '100%' } }}
+                                />
+                                <TextField
+                                    id={`arrival-time-${index}`}
+                                    className='process'
+                                    label="Arrival Time"
+                                    variant="outlined"
+                                    placeholder="Enter Arrival Time"
+                                    onChange={(e) => handleChange(index, e.target.value, "arrivalTime")}
+                                    sx={{ '@media (max-width: 600px)': { width: '100%' } }}
+                                />
+                                <TextField
+                                    id={`burst-time-${index}`}
+                                    className='process'
+                                    label="Burst Time"
+                                    variant="outlined"
+                                    placeholder="Enter Burst Time"
+                                    onChange={(e) => handleChange(index, e.target.value, "burstTime")}
+                                    sx={{ '@media (max-width: 600px)': { width: '100%' } }}
+                                />
+                            </div>
+                        )
+                    })}
+                    {num > 0 && <Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center", alignItems: "center", '@media (max-width: 600px)': { flexDirection: "column", alignItems: "center" } }}>
+                        <Button variant="contained" onClick={runProcesses}>Run</Button
+                        ></Box>}
+                </Box>
+            </Container>
+        </ div>
+            )
 }
