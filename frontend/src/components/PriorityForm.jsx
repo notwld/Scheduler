@@ -7,6 +7,7 @@ export default function PriorityForm() {
     const navigate = useNavigate();
     const { state } = useLocation();
     const [num, setNum] = React.useState(0)
+    const [loading, setLoading] = React.useState(false)
     const [processes, setProcesses] = React.useState([])
     const handleChange = (index, value, field) => {
         const updatedProcesses = [...processes];
@@ -17,15 +18,20 @@ export default function PriorityForm() {
 
     React.useEffect(() => {
         const newProcesses = []
-        for (let i = 0; i < num; i++) {
-            newProcesses.push({
-                name: `P${i + 1}`,
-                arrivalTime: "",
-                burstTime: "",
-                priority: ""
-            })
+        if(num<=20){
+            for (let i = 0; i < num; i++) {
+                newProcesses.push({
+                    name: `P${i + 1}`,
+                    arrivalTime: "",
+                    burstTime: "",
+                    priority: ""
+                })
+            }
+            setProcesses(newProcesses)
         }
-        setProcesses(newProcesses)
+        else{
+            alert("Please keep the number of processes less than 20")
+        }
     }, [num])
 
     const runProcesses = async () => {
@@ -40,7 +46,8 @@ export default function PriorityForm() {
             alert("Please enter valid numbers")
             return
         }
-        await fetch(`http://127.0.0.1:5000/priority${state.isThreaded===true?"-threaded":""}`, {
+        setLoading(true);
+        await fetch(`https://schedular.herokuapp.com/priority${state.isThreaded===true?"-threaded":""}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -48,7 +55,7 @@ export default function PriorityForm() {
             body: JSON.stringify(processes)
         }).then(res => res.json())
         .then(data => {
-            console.log(data)
+            setLoading(false);
             navigate("/output", {
                 state: {
                     data,
@@ -58,7 +65,8 @@ export default function PriorityForm() {
         }
         )
         .catch(err => {
-            console.log(err)
+            setLoading(false);
+            alert("Something went wrong. Please try again later.")
         }
         )
 
@@ -80,7 +88,7 @@ export default function PriorityForm() {
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                     <TextField id="outlined-basic" label="Number of Processes" variant="outlined" onChange={(e) => setNum(e.target.value)} />
                 </div>
-                {processes.map((p, index) => {
+                {!loading ? processes.map((p, index) => {
                     return (
                         <div key={index}>
                             <TextField
@@ -118,10 +126,10 @@ export default function PriorityForm() {
 
                         </div>
                     )
-                })}
-                {num > 0 && <Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                }):<img src={require("./assets/meow.gif")} width="100px" height="100px" alt="loading"/>}
+                {num > 0 && !loading ?<Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center", alignItems: "center" }}>
                     <Button variant="contained" onClick={runProcesses}>Run</Button
-                    ></Box>}
+                    ></Box>:null}
             </Box>
             
         </Container>

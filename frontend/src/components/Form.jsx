@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 
 export default function BasicForm({ type }) {
-    const { state } = useLocation();
+    const { state }  = useLocation();
     const navigate = useNavigate();
     const [num, setNum] = React.useState(0)
     const [processes, setProcesses] = React.useState([])
     const [output, setOutput] = React.useState(null)
+    const [loading, setLoading] = React.useState(false)
     const handleChange = (index, value, field) => {
         const updatedProcesses = [...processes];
         updatedProcesses[index][field] = value;
@@ -16,12 +17,13 @@ export default function BasicForm({ type }) {
     }
     React.useEffect(() => {
         const newProcesses = []
-        if(num<20){
+        if(num<=20){
             for (let i = 0; i < num; i++) {
                 newProcesses.push({
                     name: `P${i + 1}`,
                     arrivalTime: "",
-                    burstTime: ""
+                    burstTime: "",
+                    priority: ""
                 })
             }
             setProcesses(newProcesses)
@@ -43,8 +45,9 @@ export default function BasicForm({ type }) {
             alert("Please enter valid numbers")
             return
         }
-
-        await fetch(`http://127.0.0.1:5000/${type}${state.isThreaded===true?"-threaded":""}`, {
+        
+        setLoading(true);
+        await fetch(`https://schedular.herokuapp.com/${type}${state.isThreaded===true?"-threaded":""}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -52,6 +55,7 @@ export default function BasicForm({ type }) {
             body: JSON.stringify(processes)
         }).then(res => res.json())
             .then(data => {
+                setLoading(false);
                 setOutput(data)
                 // console.log(data)
                 navigate("/output", {
@@ -62,7 +66,8 @@ export default function BasicForm({ type }) {
                 })
             })
             .catch(err => {
-                console.log(err)
+                setLoading(false);
+                alert("Something went wrong. Please try again later.")
             })
     }
 
@@ -83,7 +88,7 @@ export default function BasicForm({ type }) {
                     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", '@media (max-width: 600px)': { flexDirection: "column", alignItems: "center" } }}>
                         <TextField id="outlined-basic" label="Number of Processes" variant="outlined" onChange={(e) => setNum(e.target.value)} />
                     </div>
-                    {processes.map((p, index) => {
+                    {!loading ? processes.map((p, index) => {
                         return (
                             <div key={index}>
                                 <TextField
@@ -115,10 +120,10 @@ export default function BasicForm({ type }) {
                                 />
                             </div>
                         )
-                    })}
-                    {num > 0 && <Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center", alignItems: "center", '@media (max-width: 600px)': { flexDirection: "column", alignItems: "center" } }}>
+                    }):<img src={require("./assets/meow.gif")} width="100px" height="100px" alt="loading"/>}
+                    {num > 0 && !loading ? <Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center", alignItems: "center", '@media (max-width: 600px)': { flexDirection: "column", alignItems: "center" } }}>
                         <Button variant="contained" onClick={runProcesses}>Run</Button
-                        ></Box>}
+                        ></Box> : null}
                 </Box>
             </Container>
         </ div>
