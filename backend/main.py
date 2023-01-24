@@ -1,10 +1,15 @@
 from algorithms import *
+from thread_algo import *
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask import render_template
-
+from time import time
 app = Flask(__name__)
 CORS(app)
+
+app.config["Allow_Headers"] = "*"
+app.config["Allow_Methods"] = "*"
+app.config["Allow_Origin"] = "*"
 
 def dictionary_to_list(processes):
     process_list = []
@@ -25,16 +30,20 @@ def index():
     return "Welcome to Scheduler"
 
 
-@app.route("/fcfs", methods=["GET", "POST"])
+@app.route("/fcfs", methods=["POST"])
 def fcfs():
     processes = request.get_json()
     processes = dictionary_to_list(processes)
+    print("starting fcfs")
+    start = time()
     scheduler = FCFS(processes)
+    end = time()
+    print(end - start)
     return jsonify(scheduler.output())
 
 
 
-@app.route("/sjf", methods=["GET", "POST"])
+@app.route("/sjf", methods=["POST"])
 def sjf():
     processes = request.get_json()
     processes = dictionary_to_list(processes)
@@ -42,7 +51,7 @@ def sjf():
     return jsonify(scheduler.output())
 
 
-@app.route("/rr", methods=["GET", "POST"])
+@app.route("/rr", methods=["POST"])
 def rr():
     data = request.json
     processes = dictionary_to_list(data['processes'])
@@ -51,11 +60,48 @@ def rr():
     return jsonify(scheduler.output())
 
 
-@app.route("/priority", methods=["GET", "POST"])
+@app.route("/priority", methods=["POST"])
 def priority():
     processes = request.get_json()
     processes = process_to_list(processes)
     scheduler = PriorityScheduler(processes)
+    return jsonify(scheduler.output())
+
+@app.route("/fcfs-threaded", methods=["POST"])
+def thread_fcfs():
+    processes = request.get_json()
+    processes = dictionary_to_list(processes)
+    print("starting threaded fcfs")
+    start = time()
+    scheduler = ThreadFCFS(processes)
+    end = time()
+    print(end - start)
+    return jsonify(scheduler.output())
+
+
+
+@app.route("/sjf-threaded", methods=["POST"])
+def thread_sjf():
+    processes = request.get_json()
+    processes = dictionary_to_list(processes)
+    scheduler = ThreadSJF(processes)
+    return jsonify(scheduler.output())
+
+
+@app.route("/rr-threaded", methods=["POST"])
+def thread_rr():
+    data = request.json
+    processes = dictionary_to_list(data['processes'])
+    quantum = data['quantum']
+    scheduler = ThreadRoundRobin(processes, int(quantum))
+    return jsonify(scheduler.output())
+
+
+@app.route("/priority-threaded", methods=["POST"])
+def thread_priority():
+    processes = request.get_json()
+    processes = process_to_list(processes)
+    scheduler = ThreadPriorityScheduler(processes)
     return jsonify(scheduler.output())
 
 
