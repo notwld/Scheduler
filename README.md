@@ -39,8 +39,10 @@ npm start
 
 Contribute to this repo by following these steps,
 
+Fork the repo and then
+
 ```bash
-git clone https://github.com/notwld/Scheduler
+git clone (your forked repo link)
 ```
 
 It'll clone this repo on your local machine.
