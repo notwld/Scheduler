@@ -1,4 +1,4 @@
-import { Container } from '@mui/material'
+import { Container, Typography } from '@mui/material'
 import React from 'react'
 import Card from './Card'
 
@@ -55,10 +55,23 @@ export default function Home() {
 
     ]
     return (
-        <Container style={{ marginTop: "30px", marginBottom: "20px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px" }}>
-            {algorithms.map((algorithm, index) => (
-                <Card key={index} title={algorithm.title} description={algorithm.description} route={algorithm.route} isThreaded={algorithm.isThreaded} />
-            ))}
+        <Container style={{marginTop: "30px"}}>
+            <Typography variant='h5' style={{ textAlign: "center", textDecoration: "underline", fontSize: "24px"}}> Normal Algorithms</Typography>
+            <Container style={{ marginTop: "30px", marginBottom: "20px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px" }}>
+                {algorithms
+                    .filter(algorithm => !algorithm.isThreaded)
+                    .map((algorithm, index) => (
+                        <Card key={index} title={algorithm.title} description={algorithm.description} route={algorithm.route} isThreaded={algorithm.isThreaded} />
+                    ))}
+            </Container>
+            <Typography variant='h5' style={{ textAlign: "center", textDecoration: "underline", fontSize: "24px"}}>Threaded Algorithms</Typography>
+            <Container style={{ marginTop: "30px", marginBottom: "20px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px" }}>
+{algorithms.map((algorithm, index) => {
+if(algorithm.isThreaded) {
+return <Card key={index} title={algorithm.title} description={algorithm.description} route={algorithm.route} isThreaded={algorithm.isThreaded} />
+}
+})}
+</Container>
         </Container>
-    )
+)
 }
